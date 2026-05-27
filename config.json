@@ -1,0 +1,38 @@
+{
+  "app": {
+    "name": "Traffic Accident Risk Detection",
+    "version": "1.0.0",
+    "environment": "development"
+  },
+  "server": {
+    "host": "0.0.0.0",
+    "port": 3000,
+    "debug": true
+  },
+  "model": {
+    "path": "./models/risk_model.pkl",
+    "type": "random_forest",
+    "version": "1.0"
+  },
+  "data": {
+    "training_path": "./data/training_data.csv",
+    "features": [
+      "hour",
+      "weather",
+      "traffic_volume",
+      "avg_speed",
+      "speed_variance",
+      "visibility"
+    ]
+  },
+  "risk_thresholds": {
+    "low": 0.3,
+    "medium": 0.5,
+    "high": 0.7,
+    "critical": 0.9
+  },
+  "logging": {
+    "level": "info",
+    "format": "json"
+  }
+}
