@@ -1,3 +1,11 @@
+---
+title: Traffic Accident Risk Detection
+emoji: 🚗
+colorFrom: red
+colorTo: blue
+sdk: docker
+pinned: false
+---
 # 🚗 Traffic Accident Risk Detection
 
 An intelligent machine learning system that predicts traffic accident risk based on real-time conditions including weather, traffic volume, speed patterns, and visibility.
