@@ -38,7 +38,6 @@ COPY --from=builder --chown=user /root/.local $HOME/.local
 # Copy application code with correct user permissions
 COPY --chown=user api/ ./api/
 COPY --chown=user config.json .
-COPY --chown=user models/ ./models/
 COPY --chown=user index.html .
 
 # Health check (Updated to use port 7860)
