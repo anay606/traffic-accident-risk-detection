@@ -13,4 +13,4 @@ jobs:
       - name: Push to Hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push --force https://anay123456:$HF_TOKEN@huggingface.co/spaces/anay123456/fu main
+        run: git push --force https://anay606:$HF_TOKEN@huggingface.co/spaces/anay123456/fu main
