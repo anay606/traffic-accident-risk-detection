@@ -5,7 +5,7 @@ Main backend server for handling prediction requests
 
 import json
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import numpy as np
 from pathlib import Path
@@ -128,6 +128,12 @@ def predict_risk(data):
     except Exception as e:
         print(f"Error in prediction: {e}")
         raise
+
+@app.route('/')
+def home():
+    """Serve the main static frontend dashboard layout"""
+    root_dir = Path(__file__).parent.parent
+    return send_from_directory(root_dir, 'index.html')
 
 @app.route('/api/predict', methods=['POST'])
 def predict():
