@@ -15,33 +15,38 @@ RUN pip install --user --no-cache-dir -r requirements.txt
 # Production stage
 FROM python:3.9-slim
 
-WORKDIR /app
+# Set up a safe system user required by Hugging Face 
+RUN useradd -m -u 1000 user
+USER user
+ENV HOME=/home/user \
+    PATH=/home/user/.local/bin:$PATH \
+    PYTHONUNBUFFERED=1 \
+    PORT=7860
 
-# Install runtime dependencies
+WORKDIR $HOME/app
+
+# Install runtime dependencies (Must be done as root)
+USER root
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
+USER user
 
 # Copy Python dependencies from builder
-COPY --from=builder /root/.local /root/.local
+COPY --from=builder --chown=user /root/.local $HOME/.local
 
-# Set environment variables
-ENV PATH=/root/.local/bin:$PATH \
-    PYTHONUNBUFFERED=1 \
-    PORT=3000
+# Copy application code with correct user permissions
+COPY --chown=user api/ ./api/
+COPY --chown=user config.json .
+COPY --chown=user models/ ./models/
+COPY --chown=user index.html .
 
-# Copy application code
-COPY api/ ./api/
-COPY config.json .
-COPY models/ ./models/
-COPY index.html .
-
-# Health check
+# Health check (Updated to use port 7860)
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:${PORT}/api/health || exit 1
+  CMD curl -f http://localhost:7860/api/health || exit 1
 
-# Expose port
-EXPOSE ${PORT}
+# Expose Hugging Face's port
+EXPOSE 7860
 
 # Run the application
 CMD ["python", "api/server.py"]
